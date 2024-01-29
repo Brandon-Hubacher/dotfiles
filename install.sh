@@ -43,3 +43,5 @@ cp -rf "$DOTFILES/fonts" "$XDG_DATA_HOME"
 
 mkdir -p "$XDG_CONFIG_HOME/dunst"
 ln -sf "$DOTFILES/dunst/dunstrc" "$XDG_CONFIG_HOME/dunst/dunstrc"
+
+# TODO: Add git config?
