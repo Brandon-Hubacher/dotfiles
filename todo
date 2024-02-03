@@ -1,4 +1,3 @@
-- use kickstart.nvim
 - install vim-tmux-navigator
 - add bash script for opening, cating, cding to, files with fzf
 - Use tmux-complete plugin for neovim
