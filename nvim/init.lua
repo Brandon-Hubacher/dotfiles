@@ -44,6 +44,12 @@ P.S. You can delete this when you're done too. It's your config now :)
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
+vim.o.autoindent = true
+vim.o.expandtab = true   -- Pressing TAB will insert spaces instead of a TAB character
+vim.o.tabstop = 4        -- Make TAB look like 4 spaces
+vim.o.softtabstop = 4    -- Number of spaces inserted instead of a TAB character
+vim.o.shiftwidth = 4     -- Number of spaces inserted when indenting
+
 -- [[ Install `lazy.nvim` plugin manager ]]
 require 'lazy-bootstrap'
 
