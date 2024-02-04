@@ -32,3 +32,49 @@ ftmuxp() {
 scratchpad() {
     "$DOTFILES/zsh/scratchpad.sh"
 }
+
+f() {
+    if [ $# -eq 0 ]
+    then
+        fzf
+        return 0
+    fi
+
+    calling_script_dir="$PWD"
+
+    # store the program
+    program="$1"
+
+    # pop first argument off the list
+    shift
+
+    # store any option flags
+    command_options="$@"
+
+    search_dir=/
+    cd "$search_dir"
+
+    # store the files from fzf
+    fzf_files=$(fzf --multi)
+
+    # TODO: Prepend search dir to each file
+    fzf_files="$search_dir$fzf_files"
+
+    cd "$calling_script_dir"
+
+    # if no files returned from fzf, return to the terminal
+    if [ -z "${fzf_files}" ]; then
+        return 1
+    fi
+
+    # if the program is gui, run in background
+    if [[ "$program" =~ ^(nautilus|zathura|evince|vlc|eog|kolourpaint)$ ]]; then
+        fzf_files="$fzf_files &"
+    fi
+
+    if [ -z "$command_options" ]; then
+        $program $fzf_files
+    else
+        $program $command_options $fzf_files
+    fi
+}
