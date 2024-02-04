@@ -56,4 +56,10 @@ ln -sf "$DOTFILES/tmux/tmux.conf" "$XDG_CONFIG_HOME/tmux/tmux.conf"
 && git clone https://github.com/tmux-plugins/tpm \
 "$XDG_CONFIG_HOME/tmux/plugins/tpm"
 
-# TODO: Add git config?
+#######
+# git #
+#######
+
+mkdir -p "$XDG_CONFIG_HOME/git"
+
+ln -sf "$DOTFILES/git/config" "$XDG_CONFIG_HOME/git"
