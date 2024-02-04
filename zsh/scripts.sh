@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/usr/bin/env bash
 
 compress() {
     tar cvzf $1.tar.gz $1
@@ -77,4 +77,8 @@ f() {
     else
         $program $command_options $fzf_files
     fi
+}
+
+updatesys() {
+    sh "$DOTFILES/update.sh"
 }
