@@ -33,8 +33,10 @@ bindkey -M vicmd v edit-command-line
 source ~/dotfiles/zsh/external/bd.zsh
 
 if [ $(command -v "fzf") ]; then
-    source /usr/share/fzf/completion.zsh
-    source /usr/share/fzf/key-bindings.zsh
+    # source /usr/share/fzf/completion.zsh
+    source /usr/share/doc/fzf/examples/completion.zsh
+    source /usr/share/doc/fzf/examples/key-bindings.zsh
+    # source /usr/share/fzf/key-bindings.zsh
 fi
 
 if [ "$(tty)" = "/dev/tty1" ];
@@ -51,10 +53,18 @@ bindkey -r '^l'
 bindkey -r '^g'
 bindkey -s '^g' 'clear\n'
 
-source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+# source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # pyenv
 export PYENV_ROOT="$HOME/.pyenv"
 [[ -d "$PYENV_ROOT/bin" ]] && export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
+
+# Add custom bin to path
+export PATH="$PATH:$HOME/bin"
+
+# Using i3
+export DISPLAY=$(ip route list default | awk '{print $3}'):0
+export LIBGL_ALWAYS_INDIRECT=1

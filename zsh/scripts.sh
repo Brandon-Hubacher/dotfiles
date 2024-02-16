@@ -82,3 +82,7 @@ f() {
 updatesys() {
     sh "$DOTFILES/update.sh"
 }
+
+ssh_auto() {
+    ssh -t $1@$2 'echo AUTO SSH COMMAND!!!'
+}
