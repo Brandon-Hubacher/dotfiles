@@ -84,5 +84,42 @@ updatesys() {
 }
 
 ssh_auto() {
-    ssh -t $1@$2 'echo AUTO SSH COMMAND!!!'
+    ssh -t $1@$2 '
+        echo "Starting automated environment installation!"
+        INSTALLER_BASE_DIR="${HOME}/automatic_environment_installer"
+
+        echo "Checking if environment is already present"
+        if [ -d "${INSTALLER_BASE_DIR}" ] && [ ! -z $(ls -A "${INSTALLER_BASE_DIR}") ]; then
+            echo "Everything appears to already been installed!"
+            exit 0
+        fi
+
+        echo "Environment not already present, moving ahead with installation"
+        echo "Creating ${INSTALLER_BASE_DIR}"
+        mkdir -p "${INSTALLER_BASE_DIR}"
+
+        # SSHED_ENV_INSTALLER
+        SSHED_ENV_INSTALLER_DIR="${INSTALLER_BASE_DIR}/sshed_env_installer"
+
+        git clone https://github.com/Brandon-Hubacher/sshed_env_installer.git "${SSHED_ENV_INSTALLER_DIR}"
+
+        cd "${SSHED_ENV_INSTALLER_DIR}"
+
+        ./install.sh
+
+        # ORC3 INSTALLATION
+        mkdir -p "${HOME}/orc3_repo_test"
+
+        if [ -z $(ls -A "${HOME}/orc3_repo_test") ]; then
+            cd "$HOME/orc3_repo_test"
+            git clone git@github.amd.com:dcgpu-validation/orc3.git
+            cd orc3
+
+            sudo orc_install/install_pyenv.sh
+
+            orc_python orc_install/install.py --venv=/home/"$USER"/orc3_repo_test/orc3_py_venv dev
+        fi
+    '
+
+    ssh $1@$2 -t "zsh --login"
 }
