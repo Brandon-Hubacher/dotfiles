@@ -68,3 +68,7 @@ export PATH="$PATH:$HOME/bin"
 # Using i3
 export DISPLAY=$(ip route list default | awk '{print $3}'):0
 export LIBGL_ALWAYS_INDIRECT=1
+
+# Add ssh key to the agent for forwarding (I think)
+eval "$(ssh-agent -s)" 
+ssh-add "$HOME"/.ssh/id_ed25519_conductor_and_orc
