@@ -70,6 +70,6 @@ export DISPLAY=$(ip route list default | awk '{print $3}'):0
 export LIBGL_ALWAYS_INDIRECT=1
 
 # SSH agent and key recognition
-eval "$(ssh-agent -s)"
-ssh-add "$HOME"/.ssh/id_ed25519_conductor_and_orc
-ssh-add ~/.ssh/id_ed25519_work_to_personal
+eval "$(ssh-agent -s)" > /dev/null
+ssh-add "$HOME"/.ssh/id_ed25519_conductor_and_orc 2> /dev/null
+ssh-add ~/.ssh/id_ed25519_work_to_personal 2> /dev/null
