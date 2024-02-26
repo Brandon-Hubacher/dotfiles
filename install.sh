@@ -61,6 +61,6 @@ ln -sf "$DOTFILES/tmux/tmux.conf" "$HOME/.tmux.conf"
 # git #
 #######
 
-# mkdir -p "$XDG_CONFIG_HOME/git"
-# 
-# ln -sf "$DOTFILES/git/config" "$XDG_CONFIG_HOME/git"
+mkdir -p "$XDG_CONFIG_HOME/git"
+
+ln -sf "$DOTFILES/git/config" "$XDG_CONFIG_HOME/git"

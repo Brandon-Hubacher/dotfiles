@@ -73,3 +73,7 @@ export LIBGL_ALWAYS_INDIRECT=1
 eval "$(ssh-agent -s)" > /dev/null
 ssh-add "$HOME"/.ssh/id_ed25519_conductor_and_orc 2> /dev/null
 ssh-add ~/.ssh/id_ed25519_work_to_personal 2> /dev/null
+
+# configure git user, depends on file already being present on system
+# to not leak information
+"$HOME/configure_git_user.sh"
