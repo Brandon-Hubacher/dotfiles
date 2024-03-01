@@ -84,42 +84,54 @@ updatesys() {
 }
 
 ssh_auto() {
-    ssh -t $1@$2 '
-        echo "Starting automated environment installation!"
-        INSTALLER_BASE_DIR="${HOME}/automatic_environment_installer"
+    REMOTE_CONFIGURE_GIT_USER_PATH="/home/$1/configure_git_user.sh"
+    scp "$LOCAL_CONFIGURE_GIT_USER_PATH" "$1@$2:$REMOTE_CONFIGURE_GIT_USER_PATH"
 
-        echo "Checking if environment is already present"
-        if [ -d "${INSTALLER_BASE_DIR}" ] && [ ! -z $(ls -A "${INSTALLER_BASE_DIR}") ]; then
-            echo "Everything appears to already been installed!"
-            exit 0
-        fi
+    HOME_VAR_NAME='$HOME'
+    LS_INSTALLER_BASE_DIR_FILES='$(ls -A "${INSTALLER_BASE_DIR}")'
+    INSTALLER_BASE_DIR_NAME='$INSTALLER_BASE_DIR'
+    SSHED_ENV_INSTALLER_DIR_NAME='$SSHED_ENV_INSTALLER_DIR'
+    LS_ORC3_DIR_FILES='$(ls -A "${HOME}/orc3_repo_test")'
+    USER_VAR_NAME='$USER'
+    
+    installation_command="
+    'echo Starting automated environment installation! export LOCAL_CONFIGURE_GIT_USER_PATH='${REMOTE_CONFIGURE_GIT_USER_PATH}
 
-        echo "Environment not already present, moving ahead with installation"
-        echo "Creating ${INSTALLER_BASE_DIR}"
-        mkdir -p "${INSTALLER_BASE_DIR}"
+    INSTALLER_BASE_DIR=$HOME_VAR_NAME/automatic_environment_installer
 
-        # SSHED_ENV_INSTALLER
-        SSHED_ENV_INSTALLER_DIR="${INSTALLER_BASE_DIR}/sshed_env_installer"
+    echo Checking if environment is already present
 
-        git clone https://github.com/Brandon-Hubacher/sshed_env_installer.git "${SSHED_ENV_INSTALLER_DIR}"
+    if [ -d "${INSTALLER_BASE_DIR_NAME}" ] && [ ! -z ${LS_INSTALLER_BASE_DIR_FILES} ]; then
+        echo Everything appears to already be installed!
+        exit 0
+    fi
 
-        cd "${SSHED_ENV_INSTALLER_DIR}"
+    echo Environment not already present, moving ahead with installation
+    echo Creating ${INSTALLER_BASE_DIR_NAME}
+    mkdir -p ${INSTALLER_BASE_DIR_NAME}
 
-        ./install.sh
+    SSHED_ENV_INSTALLER_DIR=${INSTALLER_BASE_DIR_NAME}/sshed_env_installer
 
-        # ORC3 INSTALLATION
-        mkdir -p "${HOME}/orc3_repo_test"
+    git clone https://github.com/Brandon-Hubacher/sshed_env_installer.git ${SSHED_ENV_INSTALLER_DIR_NAME}
 
-        if [ -z $(ls -A "${HOME}/orc3_repo_test") ]; then
-            cd "$HOME/orc3_repo_test"
-            git clone git@github.amd.com:dcgpu-validation/orc3.git
-            cd orc3
+    cd ${SSHED_ENV_INSTALLER_DIR_NAME}
 
-            sudo orc_install/install_pyenv.sh
+    ./install.sh
 
-            orc_python orc_install/install.py --venv=/home/"$USER"/orc3_repo_test/orc3_py_venv dev
-        fi
-    '
+    mkdir -p ${HOME_VAR_NAME}/orc3_repo_test
+
+    if [ -z ${LS_ORC3_DIR_FILES} ]; then
+        cd ${HOME_VAR_NAME}/orc3_repo_test
+        git clone git@github.amd.com:dcgpu-validation/orc3.git
+        cd orc3
+
+        sudo orc_install/install_pyenv.sh
+
+    orc_python orc_install/install.py --venv=/home/${USER_VAR_NAME}/orc3_repo_test/orc3_py_venv dev
+    fi
+    "
+
+    ssh -t $1@$2 $installation_command
 
     ssh $1@$2 -t "zsh --login"
 }

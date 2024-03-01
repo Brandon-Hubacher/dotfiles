@@ -76,4 +76,7 @@ ssh-add ~/.ssh/id_ed25519_work_to_personal 2> /dev/null
 
 # configure git user, depends on file already being present on system
 # to not leak information
-"$HOME/configure_git_user.sh"
+if [ -z "$LOCAL_CONFIGURE_GIT_USER_PATH" ]; then
+    export LOCAL_CONFIGURE_GIT_USER_PATH="$HOME/configure_git_user.sh"
+fi
+"$LOCAL_CONFIGURE_GIT_USER_PATH"
