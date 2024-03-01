@@ -95,7 +95,8 @@ ssh_auto() {
     USER_VAR_NAME='$USER'
     
     installation_command="
-    'echo Starting automated environment installation! export LOCAL_CONFIGURE_GIT_USER_PATH='${REMOTE_CONFIGURE_GIT_USER_PATH}
+    echo Starting automated environment installation!;
+    export LOCAL_CONFIGURE_GIT_USER_PATH=${REMOTE_CONFIGURE_GIT_USER_PATH}
 
     INSTALLER_BASE_DIR=$HOME_VAR_NAME/automatic_environment_installer
 
